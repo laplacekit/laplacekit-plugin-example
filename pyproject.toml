@@ -1,0 +1,59 @@
+[project]
+name = "laplacekit-example"
+version = "0.1a0"
+description = "The docs' example plugin: the last n layers as a subset"
+authors = [{ name = "Agustinus Kristiadi", email = "agustinus@kristia.de" }]
+license = "MIT"
+requires-python = ">=3.13"
+dependencies = ["laplacekit>=0.1a0,<0.2"]
+
+[project.entry-points."laplacekit.plugins"]
+laplacekit_example = "laplacekit_example:plugin"
+
+[build-system]
+requires = ["uv_build>=0.13.0,<0.14"]
+build-backend = "uv_build"
+
+[dependency-groups]
+dev = [
+  # laplacekit from GitHub until it is on PyPI. Delete this line once it is.
+  "laplacekit @ git+https://github.com/laplacekit/laplacekit",
+  "pytest>=8",
+  "ruff>=0.14",
+  "ty>=0.0.104",
+  "import-linter>=2.1",
+]
+
+[tool.ruff]
+line-length = 100
+target-version = "py313"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B", "D"]
+ignore = ["D202"]  # a blank line after a function's docstring is fine
+
+[tool.ruff.lint.pydocstyle]
+convention = "google"
+
+[tool.ruff.lint.per-file-ignores]
+"tests/**" = ["D"]
+
+[tool.importlinter]
+root_packages = ["laplacekit_example", "laplacekit"]
+
+[[tool.importlinter.contracts]]
+name = "laplacekit_example imports only the public laplacekit API"
+type = "forbidden"
+source_modules = ["laplacekit_example"]
+forbidden_modules = ["laplacekit.core.*"]
+allow_indirect_imports = true
+
+[tool.pytest.ini_options]
+filterwarnings = [
+  # torch calls torch.jit.script inside its own forward-mode AD, which warns on Python 3.14+.
+  "ignore:`torch.jit.script` is not supported:FutureWarning:torch.jit._script",
+]
+
+# VS Code's Pylance reads this: a class that misses a protocol method is marked in red.
+[tool.pyright]
+typeCheckingMode = "standard"
