@@ -50,10 +50,6 @@ uv run ty check        # types
 uv run lint-imports    # only the public laplacekit API is imported
 ```
 
-> [!NOTE]
-> Until <code><b>laplacekit</b></code> is on PyPI, the `dev` group in
-> `pyproject.toml` installs it from GitHub. Delete that line once it is.
-
 ## License
 
 MIT
